@@ -168,84 +168,6 @@ POST /api/profesores
 
 ## 🛠️ Script SQL Entidades Principales
 
-###  📝 Script SQL para la tabla Estado
-CREATE TABLE estado (
-    -- Clave primaria autoincremental (SERIAL en PostgreSQL)
-    id SERIAL PRIMARY KEY,
-    
-    -- Nombre del estado (ej. 'PENDIENTE', 'ACEPTADA', 'RECHAZADA'). No puede ser nulo.
-    nombre VARCHAR(50) NOT NULL UNIQUE);
-
-
-###  📝 Script SQL para la tabla Usuario
-CREATE TABLE usuario (
-    -- Clave primaria autoincremental
-    id SERIAL PRIMARY KEY,
-    
-    -- Nombre completo del usuario. No puede ser nulo.
-    nombre VARCHAR(255) NOT NULL,
-    
-    -- Correo electrónico (debe ser único). No puede ser nulo.
-    correo VARCHAR(255) UNIQUE NOT NULL,
-    
-    -- Contraseña hasheada. No puede ser nulo.
-    password VARCHAR(255) NOT NULL,
-    
-    -- Rol (ADMINISTRADOR, ESTUDIANTE) para la herencia.
-    rol VARCHAR(50) NOT NULL
-);
-
-###  📝 Script SQL para la tabla Estudiante
-CREATE TABLE estudiante (
-    -- Clave primaria que también es clave foránea a la tabla usuario (Herencia por clave)
-    id INT PRIMARY KEY,
-    
-    -- Curso al que pertenece el estudiante
-    curso VARCHAR(100),
-    
-    -- Definición de la clave foránea que relaciona esta tabla con la tabla 'usuario'
-    CONSTRAINT fk_estudiante_usuario
-        FOREIGN KEY (id)
-        REFERENCES usuario (id)
-        ON DELETE CASCADE -- Si se borra el usuario base, se borra el estudiante.
-);
-
-###  📝 Script SQL para la tabla Postulación
-
-CREATE TABLE postulacion (
-    -- Clave primaria autoincremental
-    id SERIAL PRIMARY KEY,
-    
-    -- Clave foránea al Estudiante (relación One-to-Many: Estudiante tiene muchas Postulaciones)
-    estudiante_id INT NOT NULL,
-    
-    -- Clave foránea al Electivo (relación One-to-Many: Electivo recibe muchas Postulaciones)
-    electivo_id INT NOT NULL,
-    
-    -- Fecha y hora de la postulación
-    fecha TIMESTAMP NOT NULL,
-    
-    -- Clave foránea al Estado de la postulación
-    estado_id INT NOT NULL,
-    
-    -- Definición de la clave foránea a la tabla 'estudiante'
-    CONSTRAINT fk_postulacion_estudiante
-        FOREIGN KEY (estudiante_id)
-        REFERENCES estudiante (id)
-        ON DELETE CASCADE, -- Si el estudiante se borra, se borran sus postulaciones.
-        
-    -- Definición de la clave foránea a la tabla 'electivo' (Asumiendo que esta tabla se creará después)
-    -- CONSTRAINT fk_postulacion_electivo
-    --     FOREIGN KEY (electivo_id)
-    --     REFERENCES electivo (id)
-    --     ON DELETE CASCADE,
-        
-    -- Definición de la clave foránea al estado
-    CONSTRAINT fk_postulacion_estado
-        FOREIGN KEY (estado_id)
-        REFERENCES estado_postulacion (id)
-);
-
 ### 📝 Scripts de Inserción de Estados Iniciales (estado) 🚦
 Primero, necesitamos asegurarnos de que los posibles estados para las tareas existan en la tabla estado.
 
@@ -257,6 +179,9 @@ INSERT INTO estado (nombre) VALUES
 
 -- NOTA: Asumiendo que 'pendiente' tiene ID 1, 'en progreso' tiene ID 2 y 'completada' tiene ID 3 
 -- si la columna 'id' es SERIAL y se insertan en este orden.
+
+Las demás tablas se crean automáticamente, gracias a la configuración del archivo application.properties.
+
 
 ## 🚀 Configuración y Ejecución
 
@@ -282,21 +207,6 @@ La aplicación se iniciará por defecto en http://localhost:8080.
 ## 📝 Plan de Pruebas: Gestión de Postulaciones a Electivos
 
 Haremos uso de __Postman__ para enviar las peticiones.
-
----
-
-### 🛠️ Configuración Previa: Creación de Entidades Base
-
-Antes de probar las postulaciones, aseguramos la existencia de entidades básicas. 
-
-| ID | Entidad | Formato JSON (POST) | Petición |
-| :---: | :---: | :---: | :---: |
-| **E1** | Estudiante | \{"nombre": "Ana López", "correo": "a@mail.com", "curso": "4A"\} | POST /api/v1/estudiantes |
-| **E2** | Estudiante | \{"nombre": "Beto Ruiz", "correo": "b@mail.com", "curso": "3B"\} | POST /api/v1/estudiantes |
-| **L1** | Electivo | \{"nombre": "Prog. Avanzada", "cupos": 1\} | POST /api/v1/electivos?profesorId=1 |
-| **L2** | Electivo | \{"nombre": "Diseño Web", "cupos": 5\} | POST /api/v1/electivos?profesorId=1 |
-
----
 
 ### 🔄 Paso 1: Creación de Postulaciones (POST)
 

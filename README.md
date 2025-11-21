@@ -8,6 +8,7 @@ Este proyecto implementa un CRUD completo para gestionar el proceso, utilizando 
 
 #### 🎯 Objetivos de Práctica
 
+* **Spring Security:** módulo de seguridad central del proyecto, su rol fundamental es definir las políticas de acceso y la gestión de la autenticación de los usuarios.
 * **Spring Boot:** Uso del framework para construir aplicaciones REST.
 * **Verbos y Códigos HTTP:** Implementación correcta de métodos HTTP (POST, GET, PUT, DELETE) y sus códigos de respuesta.
 * **Persistencia de Datos con JPA:** Mapeo de entidades y uso de Spring Data JPA para interactuar con la base de datos.
@@ -63,6 +64,14 @@ Propósito: Define el formato de intercambio de datos.
 __Responsabilidad:__ 
 * Define las estructuras de datos que se usan para enviar y recibir información a través de la API (JSON).
 * Su objetivo es evitar exponer la Entidad (Model) directamente.
+
+#### 6)  Capa config (Seguridad)
+Propósito: Su objetivo es centralizar la lógica de autenticación y autorización, definiendo quién es el usuario (autenticación) y qué puede hacer (autorización) dentro del sistema.
+
+__Responsabilidad:__ 
+* Codificación de Contraseñas: Define el Bean PasswordEncoder, utilizando BCryptPasswordEncoder. Esto garantiza que las contraseñas de los usuarios se almacenen de forma segura y cifrada (hash) en la base de datos, cumpliendo con las mejores prácticas de seguridad.
+  
+* Filtro de Seguridad Web: Configura el SecurityFilterChain (el filtro de seguridad) de Spring Security. Esto incluye la desactivación de CSRF (común en APIs REST), el uso de autenticación HTTP Basic, y la definición de las reglas de acceso por roles.
 
 #### 🔄 Flujo de Datos 
 
@@ -236,6 +245,7 @@ Probamos las reglas definidas en el **`PostulacionService`** y manejo de recurso
 * **Maven/Gradle:** Herramienta de construcción y gestión de dependencias.
 * **Base de Datos PostgreSQL (PgAdmin):** Sistema de gestión de bases de datos relacional.
 * **APIs (Interfaces de Programación de Aplicaciones) Postman:** Para enviar y probar las peticiones HTTP.
+* **Sring Swcurity** :Seguridad y el Control de Acceso de la aplicación.
 
 ### RECURSOS TECNOLOGICOS:
 
@@ -300,8 +310,15 @@ pgAdmin es la plataforma de administración y desarrollo de código abierto más
 * Administración: Facilita la gestión de usuarios, roles, permisos y la realización de tareas administrativas como backups (copias de seguridad) y restauración.
 * Monitoreo: Proporciona un dashboard (panel de control) para visualizar el estado del servidor, las conexiones activas y el rendimiento de las consultas.
 
+__5) Spring Security__
+framework Java que proporciona servicios integrales y extensibles de autenticación y autorización para aplicaciones construidas con Spring Framework o Spring Boot.
+#### Funcionalidades Clave:
 
-### COSAS PENDIENTES Y PROPUESTAS DE MEJORAS
+* Cifrado de Contraseñas: Utiliza BCryptPasswordEncoder para garantizar el almacenamiento seguro de todas las credenciales de usuario.  
+* Control de Acceso (Autorización): Establece reglas de acceso por rol (ADMINISTRADOR, PROFESOR, ESTUDIANTE) para cada endpoint de la API, asegurando que solo los usuarios autorizados puedan realizar acciones como crear electivos o postular a ellos.  
+* Autenticación HTTP Basic: Configura el mecanismo de inicio de sesión para validar credenciales contra la base de datos del sistema.
+
+###  PROPUESTAS DE MEJORAS
 
 * Trabajar en la seguridad y el control de datos para las clases de administrador y profesor, agregando los RequestDTOs que sean necesarios.
 * Solucionar problemas de bucles de serialización JSON para conseguir una API mucho más profesional.

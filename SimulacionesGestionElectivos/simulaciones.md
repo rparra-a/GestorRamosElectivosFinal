@@ -3,11 +3,11 @@
 
 El archivo distribucion_electivos.xlsx y contiene:
 
-•	40 estudiantes (20 de 3° Medio y 20 de 4° Medio).
-•	Cada estudiante tiene 3 electivos seleccionados: 
-o	Área A: Filosofía Política o Taller de Literatura.
-o	Área B: Probabilidades y Estadística o Biología Celular y Molecular.
-o	Área C: Artes Visuales o Ciencias del Ejercicio Físico.
+•	40 estudiantes (20 de 3° Medio y 20 de 4° Medio).  
+•	Cada estudiante tiene 3 electivos seleccionados:   
+o	Área A: Filosofía Política o Taller de Literatura.  
+o	Área B: Probabilidades y Estadística o Biología Celular y Molecular.  
+o	Área C: Artes Visuales o Ciencias del Ejercicio Físico.  
 
 Esto representa sus preferencias, pero no incluye hora de inscripción ni estado de asignación
 
